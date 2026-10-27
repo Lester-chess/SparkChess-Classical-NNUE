@@ -2,13 +2,13 @@
 
 SparkChess 是一款基于现代 C++17/20 开发的高性能 UCI (Universal Chess Interface 2.0) 国际象棋引擎，专为跨平台（Windows / Linux / macOS）设计。
 
-在 **v1.4** 版本中，引擎针对**中残局均势防漏招**、**优势转化为胜势**以及**外部动态链接库加载 Syzygy 残局库（.rtbw / .rtbz）**进行了全面重构升级。
+在 **v1.4** 版本中，引擎针对**中残局均势防漏招**、**优势转化为胜势**以及**外部动态链接库加载 Syzygy 残局库（.rtbw / .rtbz）**进行了升级。
 
 ---
 
-## 🚀 v1.4 核心升级亮点
+ v1.4 核心升级亮点
 
-### 1. 搜索引擎精度与防漏招体系升级 (`src/search.cpp`, `src/board.cpp`, `src/movegen.cpp`)
+ 1. 搜索引擎精度与防漏招体系升级 (`src/search.cpp`, `src/board.cpp`, `src/movegen.cpp`)
 - **静态搜索地平线将军探测 (`GEN_QUIET_CHECKS`)**：
   - 在 `qsearch` 首层（`qply == 0`）新增安静将军着法生成与探测（结合 `SEE >= 0` 安全过滤），彻底解决叶节点对马抽将、底线闷杀、车象闪将等 1~2 步战术组合失明的问题。
 - **静态交换评估 (`Board::see`) X-Ray 透视与牵制修正**：
@@ -25,7 +25,7 @@ SparkChess 是一款基于现代 C++17/20 开发的高性能 UCI (Universal Ches
 - **优势局面动态防和棋 (Dynamic Draw Contempt)**：
   - 当根节点评估处于明显优势（`>= +140 cp`）时，自动对搜索树内的重复局面与 50 回合和棋施加动态惩罚（`-15 ~ -45 cp`），杜绝优势下走出三次重复或容忍对手长将逼和。
 
-### 2. Classical 古典评估中残局战术与优势转化增强 (`src/evaluate.cpp`)
+ 2. Classical 古典评估中残局战术与优势转化增强 (`src/evaluate.cpp`)
 - **绝对牵制 (`blockers_for_king`) 与捉双 (`Fork`) 实时评估**：
   - 实时识别被敌方车/象/后牵制在己方王前的马、象、车、后并给予阶段惩罚；检测兵捉双与安全格马捉双威胁。
 - **受困子 (`Trapped Pieces`) 与坏象 (`Bad Bishop`) 惩罚**：
@@ -49,26 +49,3 @@ SparkChess 是一款基于现代 C++17/20 开发的高性能 UCI (Universal Ches
   - `SyzygyProbeLimit`：最大探测棋子数（默认 `7`，范围 `0 ~ 7`）。
 - **根节点完美过滤 + 搜索树内 WDL 裁剪**：
   - 根节点通过 `Syzygy::probe_root` 直接锁定最优胜/和层级走法；搜索树内通过 `Syzygy::probe_wdl` 精确返回胜负和并写入置换表，同时在 UCI 输出中实时汇报 `tbhits`。
-
----
-
-## 🛠️ 一键编译指南
-
-### Windows (Visual Studio MSVC)
-双击运行根目录下的 `build_windows.bat`，脚本将自动：
-1. 编译生成 `bin\syzygy.dll` 动态链接库；
-2. 编译生成 `bin\sparkchess.exe` 主引擎程序；
-3. 自动拷贝开局库 `book.bin` 与 NNUE 权重并运行 `bench 5` 验证。
-
-### Linux / macOS (GNU Make)
-```bash
-make clean && make
-```
-将同时生成 `bin/libsyzygy.so` 与 `bin/sparkchess`。
-
-### 跨平台 CMake
-```bash
-mkdir build && cd build
-cmake ..
-cmake --build . --config Release
-```
