@@ -1,4 +1,4 @@
-# SparkChess User & Tuning Manual
+# SparkChess 1.4.0 Hotfix1 Build & Tuning Manual
 
 SparkChess is a high-performance chess engine compliant with the Universal Chess Interface (UCI) protocol, featuring an evaluation module that supports both offline Texel evaluation optimization and online SPSA search parameter tuning.
 
@@ -28,9 +28,9 @@ chmod +x bin/sparkchess
 ```
 
 #### On Windows
-- Open the project solution in **Visual Studio** or compile via MinGW64:
-```powershell
-g++ -O3 -std=c++17 -fopenmp src/*.cpp -o bin/sparkchess.exe
+- :Use the internal Bat to build the exe version 
+
+
 ```
 
 #### Running Windows `.exe` on Linux via Wine
@@ -89,11 +89,11 @@ tune texel <dataset.pgn> <epochs> <learning_rate> <output_weights.bin> <start_fr
 
 ### 3.3 Execution Example
 ```text
-tune texel long_decided_games.bare.[21951].pgn 100 0.004 HCE1.bin 0
+tune texel long_decided_games.bare.[21951].pgn 10 0.002 HCE1.bin 0
 ```
 
 ### 3.4 Operational Notes
-- **Loading Latency**: Parsing large PGN files (e.g., 20,000+ games) may take several minutes before `Epoch 1/100` appears.
+- **Loading Latency**: Parsing large PGN files (e.g., 20,000+ games) may take several minutes before `Epoch 1/10` appears.
 - **CPU Utilization**: Ensure multi-threading is enabled so that feature extraction scales across all available cores.
 
 ---
