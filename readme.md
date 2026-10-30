@@ -31,17 +31,7 @@ chmod +x bin/sparkchess
 - :Use the internal Bat to build the exe version 
 
 
-```
 
-#### Running Windows `.exe` on Linux via Wine
-If you are running the precompiled Windows `.exe` inside a headless Linux cloud container (such as AutoDL):
-```bash
-# Install Wine
-sudo apt-get update && sudo apt-get install -y wine
-
-# Run without buffering delays
-WINEDEBUG=-all stdbuf -oL -eL wine sparkchess.exe
-```
 
 ---
 
